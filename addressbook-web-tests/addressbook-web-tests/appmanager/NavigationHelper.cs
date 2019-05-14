@@ -19,19 +19,46 @@ namespace WebAddressbookTests
             this.baseURL = baseURL;
         }
 
+        //страница логина
         public void OpenLoginPage()
         {
-            driver.Navigate().GoToUrl(baseURL + "/addressbook/");
+            if (driver.Url == baseURL + "/addressbook/"
+                && IsElementPresent(By.Name("LoginForm")))
+            {
+                return;
+            }
+                driver.Navigate().GoToUrl(baseURL + "/addressbook/");
         }
 
         public void GoToGroupsPage()
         {
+            if (driver.Url == baseURL + "/addressbook/group.php"
+                && IsElementPresent(By.Name("new")))
+            {
+                return;
+            }
             driver.FindElement(By.LinkText("groups")).Click();
         }
 
+        //стартовая страница
         public void GoToHomePage()
         {
+            if (driver.Url == baseURL + "/addressbook/"
+                && IsElementPresent(By.Name("logout")))
+            {
+                return;
+            }
             driver.FindElement(By.LinkText("home")).Click();
+        }
+
+        public void GoToContactCreationPage()
+        {
+            if (driver.Url == baseURL + "/addressbook/edit.php"
+                && IsElementPresent(By.Name("submit")))
+            {
+                return;
+            }
+            driver.FindElement(By.LinkText("add new")).Click();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WebAddressbookTests
 
         public ContactHelper Create(ContactData contact)
         {
-            InitContactCreation();
+            manager.Navigator.GoToContactCreationPage();
             FillContactForm(contact);
             SubmitContactCreation();
             ReturnToHomePage();
@@ -50,12 +50,6 @@ namespace WebAddressbookTests
         {
             Type(By.Name("firstname"), contact.Firstname);
             Type(By.Name("lastname"), contact.Lastname);
-            return this;
-        }
-
-        public ContactHelper InitContactCreation()
-        {
-            driver.FindElement(By.LinkText("add new")).Click();
             return this;
         }
 
