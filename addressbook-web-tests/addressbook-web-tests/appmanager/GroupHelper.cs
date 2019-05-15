@@ -27,10 +27,11 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper Modify(int v, GroupData newData)
+        public GroupHelper Modify(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(v);
+            DefaultGroupCreation(index);
+            SelectGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
@@ -38,10 +39,11 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper Remove(int v)
+        public GroupHelper Remove(int index)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(v);
+            DefaultGroupCreation(index);
+            SelectGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
             return this;
@@ -95,6 +97,24 @@ namespace WebAddressbookTests
         {
             driver.FindElement(By.Name("edit")).Click();
             return this;
+        }
+
+        //проверка наличия группы
+        public bool IsGroupCreated(int index)
+        {
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
+        }
+
+        //создаем тестовую группу, если еще нет созданных
+        public void DefaultGroupCreation(int index)
+        {
+            if (!IsGroupCreated(index))
+            {
+                GroupData defaultGroupData = new GroupData("Default group name");
+                defaultGroupData.Header = "Default header name";
+                defaultGroupData.Footer = "Default footer name";
+                Create(defaultGroupData);
+            }
         }
     }
 }

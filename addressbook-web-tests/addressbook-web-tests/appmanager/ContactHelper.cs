@@ -28,6 +28,7 @@ namespace WebAddressbookTests
         public ContactHelper Modify(int index, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
+            DefaultContactCreation(index);
             InitContactModification(index);
             FillContactForm(newData);
             SubmitContactModification();
@@ -38,6 +39,7 @@ namespace WebAddressbookTests
         public ContactHelper Remove(int index)
         {
             manager.Navigator.GoToHomePage();
+            DefaultContactCreation(index);
             SelectContact(index);
             InitContactRemove();
             SubmitContactRemove();
@@ -53,15 +55,17 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper SubmitContactCreation() //кнопка Enter при создании контакта
+        //кнопка Enter при создании контакта
+        public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
             return this;
         }
 
+        //кнопка возврата на главную после создания контакта
         public ContactHelper ReturnToHomePage()
         {
-            driver.FindElement(By.LinkText("home page")).Click(); //кнопка возврата на главную после создания контакта
+            driver.FindElement(By.LinkText("home page")).Click();
             return this;
         }
 
@@ -83,7 +87,8 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper InitContactModification(int index) //изменение по нажатию на карандашик
+        //изменение по нажатию на карандашик
+        public ContactHelper InitContactModification(int index)
         {
             driver.FindElement(By.XPath("(//img[@title='Edit'])[" + index + "]")).Click();
             return this;
@@ -93,6 +98,22 @@ namespace WebAddressbookTests
         {
             driver.FindElement(By.Name("update")).Click();
             return this;
+        }
+
+        //проверка наличия конакта
+        public bool IsContactCreated(int index)
+        {
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
+        }
+
+        //создаем тестовый контакт, если еще нет созданного
+        public void DefaultContactCreation(int index)
+        {
+            if (!IsContactCreated(index))
+            {
+                ContactData defaultContactData = new ContactData("Default Firstname", "Default Lastname");
+                Create(defaultContactData);
+            }
         }
     }
 }
