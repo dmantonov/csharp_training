@@ -28,7 +28,6 @@ namespace WebAddressbookTests
         public ContactHelper Modify(int index, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
-            DefaultContactCreation(index);
             InitContactModification(index);
             FillContactForm(newData);
             SubmitContactModification();
@@ -39,7 +38,6 @@ namespace WebAddressbookTests
         public ContactHelper Remove(int index)
         {
             manager.Navigator.GoToHomePage();
-            DefaultContactCreation(index);
             SelectContact(index);
             InitContactRemove();
             SubmitContactRemove();
@@ -107,12 +105,16 @@ namespace WebAddressbookTests
         }
 
         //создаем тестовый контакт, если еще нет созданного
-        public void DefaultContactCreation(int index)
+        public void CreateIfContactNotCreated(int index)
         {
+            manager.Navigator.GoToHomePage();
             if (!IsContactCreated(index))
             {
-                ContactData defaultContactData = new ContactData("Default Firstname", "Default Lastname");
-                Create(defaultContactData);
+                for (int i = 1; i <= index; i++)
+                {
+                    ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i);
+                    Create(defaultContactData);
+                }
             }
         }
     }
