@@ -30,7 +30,6 @@ namespace WebAddressbookTests
         public GroupHelper Modify(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-            DefaultGroupCreation(index);
             SelectGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
@@ -42,7 +41,6 @@ namespace WebAddressbookTests
         public GroupHelper Remove(int index)
         {
             manager.Navigator.GoToGroupsPage();
-            DefaultGroupCreation(index);
             SelectGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
@@ -106,14 +104,18 @@ namespace WebAddressbookTests
         }
 
         //создаем тестовую группу, если еще нет созданных
-        public void DefaultGroupCreation(int index)
+        public void CreateIfGroupNotCreated(int index)
         {
+            manager.Navigator.GoToGroupsPage();
             if (!IsGroupCreated(index))
             {
-                GroupData defaultGroupData = new GroupData("Default group name");
-                defaultGroupData.Header = "Default header name";
-                defaultGroupData.Footer = "Default footer name";
-                Create(defaultGroupData);
+                for (int i = 1; i <= index; i++)
+                {
+                    GroupData defaultGroupData = new GroupData("Default group name " + i);
+                    defaultGroupData.Header = "Default header name " + i;
+                    defaultGroupData.Footer = "Default footer name " + i;
+                    Create(defaultGroupData);
+                }
             }
         }
     }
