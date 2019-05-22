@@ -13,9 +13,10 @@ namespace WebAddressbookTests
         [Test]
         public void GroupRemovalTest()
         {
+            app.Groups.CreateIfGroupNotCreated(0);
+
             List<GroupData> oldGroups = app.Groups.GetGroupList();
 
-            app.Groups.CreateIfGroupNotCreated(0);
             app.Groups.Remove(0);
 
             List<GroupData> newGroups = app.Groups.GetGroupList();

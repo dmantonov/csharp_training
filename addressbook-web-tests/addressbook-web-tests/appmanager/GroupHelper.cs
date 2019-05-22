@@ -100,7 +100,7 @@ namespace WebAddressbookTests
         //проверка наличия группы
         public bool IsGroupCreated(int index)
         {
-            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]"));
         }
 
         //создаем тестовую группу, если еще нет созданных
@@ -109,7 +109,7 @@ namespace WebAddressbookTests
             manager.Navigator.GoToGroupsPage();
             if (!IsGroupCreated(index))
             {
-                for (int i = 1; i <= index; i++)
+                for (int i = 0; i < index + 1; i++)
                 {
                     GroupData defaultGroupData = new GroupData("Default group name " + i);
                     defaultGroupData.Header = "Default header name " + i;

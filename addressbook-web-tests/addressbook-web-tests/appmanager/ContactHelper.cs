@@ -69,7 +69,7 @@ namespace WebAddressbookTests
 
         public ContactHelper SelectContact(int index)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
             return this;
         }
 
@@ -88,7 +88,7 @@ namespace WebAddressbookTests
         //изменение по нажатию на карандашик
         public ContactHelper InitContactModification(int index)
         {
-            driver.FindElement(By.XPath("(//img[@title='Edit'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//img[@title='Edit'])[" + (index+1) + "]")).Click();
             return this;
         }
 
@@ -101,7 +101,7 @@ namespace WebAddressbookTests
         //проверка наличия конакта
         public bool IsContactCreated(int index)
         {
-            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]"));
         }
 
         //создаем тестовый контакт, если еще нет созданного
@@ -110,12 +110,28 @@ namespace WebAddressbookTests
             manager.Navigator.GoToHomePage();
             if (!IsContactCreated(index))
             {
-                for (int i = 1; i <= index; i++)
+                for (int i = 0; i < index + 1; i++)
                 {
                     ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i);
                     Create(defaultContactData);
                 }
             }
+        }
+
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.GoToHomePage();
+            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name='entry']")); //создаем список по классу
+
+            foreach (IWebElement element in elements)
+            {
+                IWebElement firstnames = element.FindElement(By.CssSelector("td:nth-child(3)")); //забираем имя
+                IWebElement lastnames = element.FindElement(By.CssSelector("td:nth-child(2)")); //забираем фамилию
+
+                contacts.Add(new ContactData(firstnames.Text, lastnames.Text));
+            }
+            return contacts;
         }
     }
 }
