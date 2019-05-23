@@ -57,6 +57,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -76,6 +77,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactRemove()
         {
             driver.SwitchTo().Alert().Accept();
+            contactCache = null;
             return this;
         }
 
@@ -95,6 +97,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.Name("update")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -118,20 +121,32 @@ namespace WebAddressbookTests
             }
         }
 
+        private List<ContactData> contactCache = null;
+
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.GoToHomePage();
-            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name='entry']")); //создаем список по классу
-
-            foreach (IWebElement element in elements)
+            if (contactCache == null)
             {
-                IWebElement firstnames = element.FindElement(By.CssSelector("td:nth-child(3)")); //забираем имя
-                IWebElement lastnames = element.FindElement(By.CssSelector("td:nth-child(2)")); //забираем фамилию
+                contactCache = new List<ContactData>();
+                manager.Navigator.GoToHomePage();
+                ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name='entry']")); //создаем список по классу
 
-                contacts.Add(new ContactData(firstnames.Text, lastnames.Text));
+                foreach (IWebElement element in elements)
+                {
+                    IWebElement firstnames = element.FindElement(By.CssSelector("td:nth-child(3)")); //забираем имя
+                    IWebElement lastnames = element.FindElement(By.CssSelector("td:nth-child(2)")); //забираем фамилию
+
+                    contactCache.Add(new ContactData(firstnames.Text, lastnames.Text) {
+                        Id = element.FindElement(By.TagName("input")).GetAttribute("value")
+                    });
+                }
             }
-            return contacts;
+
+            return new List<ContactData>(contactCache);
+        }
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.CssSelector("tr[name='entry']")).Count;
         }
     }
 }
