@@ -14,6 +14,11 @@ namespace WebAddressbookTests
         public void ContactCreationTest()
         {
             ContactData contact = new ContactData("Dmitry", "Antonov");
+            contact.Address = "rggrg\r\nfdgd\r\n\r\ndfgdf";
+            contact.HomePhone = "+7(916) 1 - 2 - 3";
+            contact.MobilePhone = "+7 (916) 4 5 6";
+            contact.Email1 = "test1@test.ru";
+            contact.Email3 = "test-em@mail.com";
 
             List<ContactData> oldContacts = app.Contacts.GetContactList();
 

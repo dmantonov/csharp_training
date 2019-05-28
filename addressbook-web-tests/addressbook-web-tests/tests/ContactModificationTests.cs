@@ -13,6 +13,13 @@ namespace WebAddressbookTests
         public void ContactModificationTest()
         {
             ContactData newData = new ContactData("Petr", "Ivanov");
+            newData.Address = "New Address";
+            newData.HomePhone = "+7(155) 1- 2-3";
+            newData.MobilePhone = "+7917456";
+            newData.WorkPhone = "89160989889";
+            newData.Email1 = "mail@test.ru";
+            newData.Email2 = "mail@test25.ru";
+            newData.Email3 = "alfred-123@mail.com";
 
             //проверка на наличие контакта
             app.Contacts.CreateIfContactNotCreated(0);
