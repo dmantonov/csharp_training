@@ -11,6 +11,12 @@ namespace WebAddressbookTests
     {
         private string allPhones;
         private string allEmails;
+        private string allInfo;
+
+        public ContactData(string allInfo)
+        {
+            AllInfo = allInfo;
+        }
 
         public ContactData(string firstname, string lastname)
         {
@@ -35,7 +41,7 @@ namespace WebAddressbookTests
         //оптимизация сравнения
         public override int GetHashCode()
         {
-            return Firstname.GetHashCode()^Lastname.GetHashCode(); //объединение двух параметров
+            return Firstname.GetHashCode() ^ Lastname.GetHashCode(); //объединение двух параметров
         }
 
         //перевод в строку, вывод ошибок
@@ -53,7 +59,7 @@ namespace WebAddressbookTests
             {
                 return 1;
             }
-            return names.CompareTo(othernames) ;
+            return names.CompareTo(othernames);
         }
 
         public string Firstname { get; set; }
@@ -114,6 +120,25 @@ namespace WebAddressbookTests
             }
         }
 
+        public string AllInfo
+        {
+            get
+            {
+                if (allInfo != null)
+                {
+                    return allInfo;
+                }
+                else
+                {
+                    return (Firstname + " " + Lastname + "\r\n" + Address + "\r\n\r\n" + ModifiedPhones(HomePhone, MobilePhone, WorkPhone) + Email1 + Email2 + Email3).Trim();
+                }
+            }
+            set
+            {
+                allInfo = value;
+            }
+        }
+
         private string CleanUp(string phone)
         {
             if (phone == null || phone == "")
@@ -125,5 +150,10 @@ namespace WebAddressbookTests
                 return Regex.Replace(phone, "[-( )]", "") + "\r\n"; //убираем лишние символы
             }
         }
+
+       public string ModifiedPhones(string modHomePhone, string modMobilePhone, string modWorkPhone)
+       {
+            return null;
+       }
     }
 }

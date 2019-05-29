@@ -102,6 +102,12 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public ContactHelper OpenContactDetails(int index)
+        {
+            driver.FindElement(By.XPath("(//img[@title='Details'])[" + (index + 1) + "]")).Click();
+            return this;
+        }
+
         public ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.Name("update")).Click();
@@ -125,7 +131,7 @@ namespace WebAddressbookTests
                 {
                     ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i);
                     defaultContactData.Address = "Default Address";
-                    defaultContactData.HomePhone = "+7(981)325 56 89";
+                    //defaultContactData.HomePhone = "+7(981)325 56 89";
                     defaultContactData.MobilePhone = "+7(555)333 56 89";
                     defaultContactData.WorkPhone = "89160989889";
                     defaultContactData.Email1 = "defmail1@test.ru";
@@ -208,6 +214,17 @@ namespace WebAddressbookTests
                 Email1 = email1,
                 Email2 = email2,
                 Email3 = email3
+            };
+        }
+
+        public ContactData GetContactInformationFromDetails(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            OpenContactDetails(0);
+            string allInfo = driver.FindElement(By.CssSelector("div#content")).Text;
+            return new ContactData(allInfo)
+            {
+                AllInfo = allInfo
             };
         }
 
