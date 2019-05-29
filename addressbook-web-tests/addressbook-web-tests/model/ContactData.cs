@@ -92,7 +92,7 @@ namespace WebAddressbookTests
                 }
                 else
                 {
-                    return (CleanUp(HomePhone) + CleanUp(MobilePhone) + CleanUp(WorkPhone)).Trim();
+                    return (PhoneCleanUp(HomePhone) + PhoneCleanUp(MobilePhone) + PhoneCleanUp(WorkPhone)).Trim();
                 }
             }
             set
@@ -101,6 +101,7 @@ namespace WebAddressbookTests
             }
         }
 
+        //не получилось адаптировать для двух тестов, надо подумать
         public string AllEmails
         {
             get
@@ -111,7 +112,7 @@ namespace WebAddressbookTests
                 }
                 else
                 {
-                    return (Email1 + "\r\n" + Email2 + "\r\n" + Email3).Trim();
+                    return (EmailModification(Email1) + EmailModification(Email2) + EmailModification(Email3)).Trim();
                 }
             }
             set
@@ -130,7 +131,9 @@ namespace WebAddressbookTests
                 }
                 else
                 {
-                    return (Firstname + " " + Lastname + "\r\n" + Address + "\r\n\r\n" + ModifiedPhones(HomePhone, MobilePhone, WorkPhone) + Email1 + Email2 + Email3).Trim();
+                    return (Firstname + " " + Lastname + "\r\n" + Address + "\r\n" 
+                        + PhoneModification(HomePhone, "H") + PhoneModification(MobilePhone, "M") + PhoneModification(WorkPhone, "W") + "\r\n"
+                        + EmailModification(Email1) + EmailModification(Email2) + EmailModification(Email3)).Trim();
                 }
             }
             set
@@ -139,7 +142,8 @@ namespace WebAddressbookTests
             }
         }
 
-        private string CleanUp(string phone)
+        //убираем лишние символы в телефоне
+        public string PhoneCleanUp(string phone)
         {
             if (phone == null || phone == "")
             {
@@ -147,13 +151,36 @@ namespace WebAddressbookTests
             }
             else
             {
-                return Regex.Replace(phone, "[-( )]", "") + "\r\n"; //убираем лишние символы
+                return Regex.Replace(phone, "[-( )]", "") + "\r\n";
             }
         }
 
-       public string ModifiedPhones(string modHomePhone, string modMobilePhone, string modWorkPhone)
+       //модфицируем телефон для details
+       public string PhoneModification(string phone, string type)
        {
-            return null;
+            if (phone == null || phone == "")
+            {
+                return "";
+            }
+            else
+            {
+                phone = $"\r\n{type}: {phone}";
+                return phone;
+            }
        }
+
+        //модифицируем e-mail для details
+        public string EmailModification(string email)
+        {
+            if (email == null || email == "")
+            {
+                return "";
+            }
+            else
+            {
+                email = $"\r\n{email}";
+                return email;
+            }
+        }
     }
 }
