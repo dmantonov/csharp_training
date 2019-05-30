@@ -47,7 +47,10 @@ namespace WebAddressbookTests
         //перевод в строку, вывод ошибок
         public override string ToString()
         {
-            return "Firstname = " + Firstname + ", Lastname = " + Lastname;
+            return "Firstname = " + Firstname + "\nLastname = " + Lastname 
+                + "\nAddress = " + Address 
+                + "\nHomePhone = " + HomePhone + "\nMobilePhone = " + MobilePhone + "\nWorkPhone = " + WorkPhone
+                + "\nEmail1 = " + Email1 + "\nEmail2 = " + Email2 + "\nEmail3 = " + Email3;
         }
 
         //операция сравнениия
