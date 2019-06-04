@@ -8,6 +8,9 @@ namespace WebAddressbookTests
 {
     public class GroupData : IEquatable<GroupData>, IComparable<GroupData>  //объекты типа GroupData теперь можно сравнивать и сортировать
     {
+        public GroupData()
+        {
+        }
 
         public GroupData(string name)
         {
