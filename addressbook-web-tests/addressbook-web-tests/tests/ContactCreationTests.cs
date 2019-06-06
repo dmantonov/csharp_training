@@ -1,8 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Excel = Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
 
 namespace WebAddressbookTests
@@ -29,7 +34,57 @@ namespace WebAddressbookTests
             return contacts;
         }
 
-        [Test, TestCaseSource("RandomContactDataProvider")]
+        public static IEnumerable<ContactData> ContactDataFromCsvFile()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            string[] lines = File.ReadAllLines(TestContext.CurrentContext.TestDirectory + "\\contacts.csv");
+            foreach (string l in lines)
+            {
+                string[] parts = l.Split(',');
+                contacts.Add(new ContactData()
+                {
+                    Firstname = parts[1],
+                    Lastname = parts[2]
+                });
+            }
+            return contacts;
+        }
+
+        public static IEnumerable<ContactData> ContactDataFromXmlFile()
+        {
+            return (List<ContactData>)new XmlSerializer(typeof(List<ContactData>))
+                .Deserialize(new StreamReader(TestContext.CurrentContext.TestDirectory + "\\contacts.xml"));
+        }
+
+        public static IEnumerable<ContactData> ContactDataFromJsonFile()
+        {
+            return JsonConvert.DeserializeObject<List<ContactData>>(
+                File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\contacts.json"));
+        }
+
+        public static IEnumerable<ContactData> ContactDataFromExcelFile()
+        {
+            List<ContactData> groups = new List<ContactData>();
+            Excel.Application app = new Excel.Application();
+            Excel.Workbook wb = app.Workbooks.Open(Path.Combine(Directory.GetCurrentDirectory()
+                , TestContext.CurrentContext.TestDirectory + "\\contacts.xlsx"));
+            Excel.Worksheet sheet = wb.ActiveSheet;
+            Excel.Range range = sheet.UsedRange;
+            for (int i = 1; i <= range.Rows.Count; i++)
+            {
+                groups.Add(new ContactData()
+                {
+                    Firstname = range.Cells[i, 1].Value,
+                    Lastname = range.Cells[i, 2].Value,
+                });
+            }
+            wb.Close();
+            app.Visible = false;
+            app.Quit();
+            return groups;
+        }
+
+        [Test, TestCaseSource("ContactDataFromJsonFile")]
         public void ContactCreationTest(ContactData contact)
         {
             List<ContactData> oldContacts = app.Contacts.GetContactList();
