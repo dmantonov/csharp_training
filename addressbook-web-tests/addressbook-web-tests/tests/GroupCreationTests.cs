@@ -122,15 +122,12 @@ namespace WebAddressbookTests
         [Test]
         public void TestDBConnectivity()
         {
-            DateTime start = DateTime.Now;
-            List<GroupData> fromUI = app.Groups.GetGroupList();
-            DateTime end = DateTime.Now;
-            System.Console.Out.WriteLine(end.Subtract(start));
-
-            start = DateTime.Now;
-            List<GroupData> fromDB = GroupData.GetAll();
-            end = DateTime.Now;
-            System.Console.Out.WriteLine(end.Subtract(start));
+            GroupData group = GroupData.GetAll()[0];
+            List<ContactData> oldList = group.GetContacts();
+            foreach (ContactData cont in oldList)
+            {
+                System.Console.Out.WriteLine(cont);
+            }
         }
     }
 }

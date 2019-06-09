@@ -171,8 +171,7 @@ namespace WebAddressbookTests
         {
             using (AddressbookDB db = new AddressbookDB())
             {
-                return (from c in db.Contacts
-                        where c.Deprecated == "0000-00-00 00:00:00" //проверяем, что контакт не удален
+                return (from c in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") //проверяем, что контакт не удален
                         orderby c.Modified ascending //сортируем по дате модификации, чтобы каждый раз модифицировался новый контакт
                         select c).ToList();
             }

@@ -26,6 +26,27 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.GoToHomePage();
+            ClearGroupFilter();
+            SelectContactById(contact.Id);
+            SelectGroupToAdd(group.Id);
+            CommitAddingContactToGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        internal void RemoveContactFromGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectFromGroups(group.Id);
+            SelectContactById(contact.Id);
+            CommitRemovingContactFromGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
         public ContactHelper ModifyByIndex(int index, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
@@ -267,6 +288,31 @@ namespace WebAddressbookTests
             string text = driver.FindElement(By.TagName("label")).Text;
             Match m = new Regex(@"\d+").Match(text);
             return Int32.Parse(m.Value);
+        }
+
+        public void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
+
+        public void SelectGroupToAdd(string id)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByValue(id);
+        }
+
+        public void CommitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        private void SelectFromGroups(string id)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByValue(id);
+        }
+
+        private void CommitRemovingContactFromGroup()
+        {
+            driver.FindElement(By.Name("remove")).Click();
         }
     }
 }
