@@ -27,10 +27,10 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper Modify(int index, GroupData newData)
+        public GroupHelper ModifyByIndex(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(index);
+            SelectGroupByIndex(index);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
@@ -38,10 +38,30 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper Remove(int index)
+        public GroupHelper ModifyById(GroupData oldData, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(index);
+            SelectGroupById(oldData.Id);
+            InitGroupModification();
+            FillGroupForm(newData);
+            SubmitGroupModification();
+            ReturnToGroupsPage();
+            return this;
+        }
+
+        public GroupHelper RemoveByIndex(int index)
+        {
+            manager.Navigator.GoToGroupsPage();
+            SelectGroupByIndex(index);
+            RemoveGroup();
+            ReturnToGroupsPage();
+            return this;
+        }
+
+        public GroupHelper RemoveById(GroupData group)
+        {
+            manager.Navigator.GoToGroupsPage();
+            SelectGroupById(group.Id);
             RemoveGroup();
             ReturnToGroupsPage();
             return this;
@@ -74,9 +94,15 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper SelectGroup(int index)
+        public GroupHelper SelectGroupByIndex(int index)
         {
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
+            return this;
+        }
+
+        public GroupHelper SelectGroupById(string id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value='"+ id +"'])")).Click();
             return this;
         }
 
@@ -114,9 +140,11 @@ namespace WebAddressbookTests
             {
                 for (int i = 0; i < index + 1; i++)
                 {
-                    GroupData defaultGroupData = new GroupData("Default group name " + i);
-                    defaultGroupData.Header = "Default header name " + i;
-                    defaultGroupData.Footer = "Default footer name " + i;
+                    GroupData defaultGroupData = new GroupData("Default group name " + i)
+                    {
+                        Header = "Default header name " + i,
+                        Footer = "Default footer name " + i
+                    };
                     Create(defaultGroupData);
                 }
             }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LinqToDB.Mapping;
 using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
 {
+    [Table(Name = "addressbook")] //таблица для контактов
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         private string allPhones;
@@ -69,25 +71,41 @@ namespace WebAddressbookTests
             return names.CompareTo(othernames);
         }
 
+        [Column(Name = "firstname")]
         public string Firstname { get; set; }
 
+        [Column(Name = "lastname")]
         public string Lastname { get; set; }
 
+        [Column(Name = "id"), PrimaryKey, Identity]
         public string Id { get; set; }
 
+        [Column(Name = "address")]
         public string Address { get; set; }
 
+        [Column(Name = "home")]
         public string HomePhone { get; set; }
 
+        [Column(Name = "mobile")]
         public string MobilePhone { get; set; }
 
+        [Column(Name = "work")]
         public string WorkPhone { get; set; }
 
+        [Column(Name = "email")]
         public string Email1 { get; set; }
 
+        [Column(Name = "email2")]
         public string Email2 { get; set; }
 
+        [Column(Name = "email3")]
         public string Email3 { get; set; }
+
+        [Column(Name = "deprecated")] //дата удаления контакта
+        public string Deprecated { get; set; }
+
+        [Column(Name = "modified")] //дата модификации контакта
+        public string Modified { get; set; }
 
         public string AllPhones
         {
@@ -146,6 +164,17 @@ namespace WebAddressbookTests
             set
             {
                 allInfo = value;
+            }
+        }
+
+        public static  List<ContactData> GetAll()
+        {
+            using (AddressbookDB db = new AddressbookDB())
+            {
+                return (from c in db.Contacts
+                        where c.Deprecated == "0000-00-00 00:00:00" //проверяем, что контакт не удален
+                        orderby c.Modified ascending //сортируем по дате модификации, чтобы каждый раз модифицировался новый контакт
+                        select c).ToList();
             }
         }
 

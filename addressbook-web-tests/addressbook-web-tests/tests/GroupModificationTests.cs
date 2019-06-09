@@ -13,20 +13,22 @@ namespace WebAddressbookTests
         [Test]
         public void GroupModificationTest()
         {
-            GroupData newData = new GroupData("New group name");
-            newData.Header = null;
-            newData.Footer = null;
+            GroupData newData = new GroupData("New group name")
+            {
+                Header = null,
+                Footer = null
+            };
 
             app.Groups.CreateIfGroupNotCreated(0);
 
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
             GroupData oldData = oldGroups[0];
 
-            app.Groups.Modify(0, newData);
+            app.Groups.ModifyById(oldData, newData);
 
             Assert.AreEqual(oldGroups.Count, app.Groups.GetGroupCount());
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
 
             oldGroups[0].Name = newData.Name;
             oldGroups.Sort();

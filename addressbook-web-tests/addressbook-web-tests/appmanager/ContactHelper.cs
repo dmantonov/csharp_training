@@ -26,25 +26,44 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper Modify(int index, ContactData newData)
+        public ContactHelper ModifyByIndex(int index, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
-            InitContactModification(index);
+            InitContactModificationByIndex(index);
             FillContactForm(newData);
             SubmitContactModification();
             ReturnToHomePage();
             return this;
         }
 
-        public ContactHelper Remove(int index)
+        public ContactHelper ModifyById(ContactData oldData, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
-            SelectContact(index);
+            InitContactModificationById(oldData.Id);
+            FillContactForm(newData);
+            SubmitContactModification();
+            ReturnToHomePage();
+            return this;
+        }
+
+        public ContactHelper RemoveByIndex(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectContactByIndex(index);
             InitContactRemove();
             SubmitContactRemove();
             manager.Navigator.GoToHomePage();
             return this;
+        }
 
+        public ContactHelper RemoveById(ContactData contact)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectContactById(contact.Id);
+            InitContactRemove();
+            SubmitContactRemove();
+            manager.Navigator.GoToHomePage();
+            return this;
         }
 
         public ContactHelper FillContactForm(ContactData contact)
@@ -76,9 +95,15 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public ContactHelper SelectContact(int index)
+        public ContactHelper SelectContactByIndex(int index)
         {
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
+            return this;
+        }
+
+        public ContactHelper SelectContactById(string id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value='" + id + "'])")).Click();
             return this;
         }
 
@@ -96,9 +121,15 @@ namespace WebAddressbookTests
         }
 
         //изменение по нажатию на карандашик
-        public ContactHelper InitContactModification(int index)
+        public ContactHelper InitContactModificationByIndex(int index)
         {
             driver.FindElement(By.XPath("(//img[@title='Edit'])[" + (index+1) + "]")).Click();
+            return this;
+        }
+
+        public ContactHelper InitContactModificationById(string id)
+        {
+            driver.FindElement(By.XPath("(//a[@href = 'edit.php?id=" + id + "'])")).Click();
             return this;
         }
 
@@ -129,14 +160,16 @@ namespace WebAddressbookTests
             {
                 for (int i = 0; i < index + 1; i++)
                 {
-                    ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i);
-                    defaultContactData.Address = "Default Address";
-                    //defaultContactData.HomePhone = "+7(981)325 56 89";
-                    defaultContactData.MobilePhone = "+7(555)333 56 89";
-                    defaultContactData.WorkPhone = "89160989889";
-                    defaultContactData.Email1 = "defmail1@test.ru";
-                    defaultContactData.Email2 = "defmail2@test25.ru";
-                    defaultContactData.Email3 = "defmail3@mail.com";
+                    ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i)
+                    {
+                        Address = "Default Address",
+                        //defaultContactData.HomePhone = "+7(981)325 56 89";
+                        MobilePhone = "+7(555)333 56 89",
+                        WorkPhone = "89160989889",
+                        Email1 = "defmail1@test.ru",
+                        Email2 = "defmail2@test25.ru",
+                        Email3 = "defmail3@mail.com"
+                    };
                     Create(defaultContactData);
                 }
             }
@@ -192,7 +225,7 @@ namespace WebAddressbookTests
         public ContactData GetContactInformaionFromEditForm(int index)
         {
             manager.Navigator.GoToHomePage();
-            InitContactModification(index);
+            InitContactModificationByIndex(index);
             string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
             string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
             string address = driver.FindElement(By.Name("address")).GetAttribute("value");
@@ -220,7 +253,7 @@ namespace WebAddressbookTests
         public ContactData GetContactInformationFromDetails(int index)
         {
             manager.Navigator.GoToHomePage();
-            OpenContactDetails(0);
+            OpenContactDetails(index);
             string allInfo = driver.FindElement(By.CssSelector("div#content")).Text;
             return new ContactData(allInfo)
             {
