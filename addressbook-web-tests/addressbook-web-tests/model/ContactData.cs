@@ -53,8 +53,8 @@ namespace WebAddressbookTests
         //перевод в строку, вывод ошибок
         public override string ToString()
         {
-            return "Firstname = " + Firstname + "\nLastname = " + Lastname 
-                + "\nAddress = " + Address 
+            return "Firstname = " + Firstname + "\nLastname = " + Lastname
+                + "\nAddress = " + Address
                 + "\nHomePhone = " + HomePhone + "\nMobilePhone = " + MobilePhone + "\nWorkPhone = " + WorkPhone
                 + "\nEmail1 = " + Email1 + "\nEmail2 = " + Email2 + "\nEmail3 = " + Email3;
         }
@@ -156,7 +156,7 @@ namespace WebAddressbookTests
                 }
                 else
                 {
-                    return (Firstname + " " + Lastname + "\r\n" + Address + "\r\n" 
+                    return (Firstname + " " + Lastname + "\r\n" + Address + "\r\n"
                         + PhoneModification(HomePhone, "H") + PhoneModification(MobilePhone, "M") + PhoneModification(WorkPhone, "W") + "\r\n"
                         + EmailModification(Email1) + EmailModification(Email2) + EmailModification(Email3)).Trim();
                 }
@@ -167,7 +167,7 @@ namespace WebAddressbookTests
             }
         }
 
-        public static  List<ContactData> GetAll()
+        public static List<ContactData> GetAll()
         {
             using (AddressbookDB db = new AddressbookDB())
             {
@@ -190,9 +190,9 @@ namespace WebAddressbookTests
             }
         }
 
-       //модфицируем телефон для details
-       public string PhoneModification(string phone, string type)
-       {
+        //модфицируем телефон для details
+        public string PhoneModification(string phone, string type)
+        {
             if (phone == null || phone == "")
             {
                 return "";
@@ -202,7 +202,7 @@ namespace WebAddressbookTests
                 phone = $"\r\n{type}: {phone}";
                 return phone;
             }
-       }
+        }
 
         //модифицируем e-mail для details
         public string EmailModification(string email)

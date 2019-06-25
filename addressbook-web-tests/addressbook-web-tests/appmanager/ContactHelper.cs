@@ -184,7 +184,7 @@ namespace WebAddressbookTests
                     ContactData defaultContactData = new ContactData("Default Firstname " + i, "Default Lastname " + i)
                     {
                         Address = "Default Address",
-                        //defaultContactData.HomePhone = "+7(981)325 56 89";
+                        HomePhone = "+7(981)325 56 89",
                         MobilePhone = "+7(555)333 56 89",
                         WorkPhone = "89160989889",
                         Email1 = "defmail1@test.ru",
@@ -305,14 +305,32 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("add")).Click();
         }
 
-        private void SelectFromGroups(string id)
+        public void SelectFromGroups(string id)
         {
             new SelectElement(driver.FindElement(By.Name("group"))).SelectByValue(id);
         }
 
-        private void CommitRemovingContactFromGroup()
+        public void CommitRemovingContactFromGroup()
         {
             driver.FindElement(By.Name("remove")).Click();
+        }
+
+        public void CheckContactWithoutGroup(ContactData contactToAdd, GroupData group)
+        {
+            if (contactToAdd == null)
+            {
+                ContactData contact = ContactData.GetAll().First();
+                RemoveContactFromGroup(contact, group);
+            }
+        }
+
+        public void CheckContactWithGroup(ContactData contactToBeRemoved, List<ContactData> oldList, GroupData group)
+        {
+            if (contactToBeRemoved == null)
+            {
+                ContactData contact = ContactData.GetAll().First();
+                AddContactToGroup(contact, group);
+            }
         }
     }
 }
