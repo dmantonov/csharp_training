@@ -15,10 +15,14 @@ namespace mantis_tests
         protected IWebDriver driver;
         protected string baseURL;
 
-        public RegistrationHelper Registration { get; set; }
         public FtpHelper Ftp { get; set; }
         public JamesHeper James { get; set; }
         public MailHelper Mail { get; set; }
+
+        protected LoginHelper loginHelper;
+        protected MantisNavigatorHelper navigator;
+        protected ProjectHelper projectHelper;
+        protected RegistrationHelper registrationHelper;
 
         private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
@@ -26,10 +30,14 @@ namespace mantis_tests
         {
             driver = new ChromeDriver();
             baseURL = "http://localhost";
-            Registration = new RegistrationHelper(this);
+
+            registrationHelper = new RegistrationHelper(this);
             Ftp = new FtpHelper(this);
             James = new JamesHeper(this);
             Mail = new MailHelper(this);
+            projectHelper = new ProjectHelper(this);
+            navigator = new MantisNavigatorHelper(this, baseURL);
+            loginHelper = new LoginHelper(this);
 
         }
 
@@ -50,7 +58,7 @@ namespace mantis_tests
             if (! app.IsValueCreated)
             {
                 ApplicationManager newInstance = new ApplicationManager();
-                newInstance.driver.Url = "http://localhost/mantisbt-2.21.1/login_page.php";
+                newInstance.driver.Url = "http://localhost/mantisbt-1.2.17/login_page.php";
                 app.Value = newInstance;
             }
             return app.Value;
@@ -61,6 +69,37 @@ namespace mantis_tests
             get
             {
                 return driver;
+            }
+        }
+
+        public LoginHelper Auth
+        {
+            get
+            {
+                return loginHelper;
+            }
+        }
+
+        public MantisNavigatorHelper Navigator
+        {
+            get
+            {
+                return navigator;
+            }
+        }
+        public ProjectHelper Project
+        {
+            get
+            {
+                return projectHelper;
+            }
+        }
+
+        public RegistrationHelper Registration
+        {
+            get
+            {
+                return registrationHelper;
             }
         }
     }

@@ -7,15 +7,15 @@ using System.IO;
 namespace mantis_tests
 {
     [TestFixture]
-    public class AccountCreatonTests : TestBase
+    public class AccountCreatonTests : AuthTestBase
     {
-        [OneTimeSetUp]
+        [SetUp]
         public void SetUpConfig()
         {
-            app.Ftp.BackupFile("/config_defaults_inc.php");
-            using (Stream localFile = File.Open(TestContext.CurrentContext.TestDirectory + "/config_defaults_inc.php", FileMode.Open))
+            app.Ftp.BackupFile("/config_inc.php");
+            using (Stream localFile = File.Open(TestContext.CurrentContext.TestDirectory + "/config_inc.php", FileMode.Open))
             {
-                app.Ftp.Upload("/config_defaults_inc.php", localFile);
+                app.Ftp.Upload("/config_inc.php", localFile);
             }
         }
 
@@ -24,7 +24,7 @@ namespace mantis_tests
         {
             AccountData account = new AccountData()
             {
-                Name = "testuser3",
+                Username = "testuser3",
                 Password = "password",
                 Email = "testuser3@localhost.localdomain"
             };
@@ -35,10 +35,10 @@ namespace mantis_tests
             app.Registration.Register(account);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void RestoreConfig()
         {
-            app.Ftp.RestoreBackupFile("/config_defaults_inc.php");
+            app.Ftp.RestoreBackupFile("/config_inc.php");
         }
     }
 }
