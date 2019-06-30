@@ -18,7 +18,7 @@ namespace mantis_tests
         public void Register(AccountData account)
         {
             OpenMainPage();
-            OpenRegistrtionForm();
+            OpenRegistrationForm();
             FillRegitrationForm(account);
             SubmitRegistration();
             string url = GetConfirmationUrl(account);
@@ -43,9 +43,10 @@ namespace mantis_tests
             throw new NotImplementedException();
         }
 
-        private void OpenRegistrtionForm()
+        private void OpenRegistrationForm()
         {
-            driver.FindElements(By.CssSelector("span.bracket-link"))[0].Click();
+            driver.FindElement(By.CssSelector("a[href = 'signup_page.php']")).Click();
+            //driver.FindElements(By.CssSelector("span.bracket-link"))[0].Click();
         }
 
         public void SubmitRegistration()

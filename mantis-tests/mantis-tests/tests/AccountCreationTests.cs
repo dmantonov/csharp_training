@@ -7,7 +7,7 @@ using System.IO;
 namespace mantis_tests
 {
     [TestFixture]
-    public class AccountCreatonTests : AuthTestBase
+    public class AccountCreatonTests : TestBase
     {
         [SetUp]
         public void SetUpConfig()

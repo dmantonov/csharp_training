@@ -19,7 +19,6 @@ namespace mantis_tests
         public void Logout()
         {
             app.Auth.Logout();
-            app.driver.Quit();
         }
     }
 }
