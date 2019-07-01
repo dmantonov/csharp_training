@@ -14,5 +14,11 @@ namespace mantis_tests
         {
             app.Auth.Login(new AccountData("administrator", "root"));
         }
+
+        [TearDown]
+        public void Quit()
+        {
+            app.driver.Quit();
+        }
     }
 }

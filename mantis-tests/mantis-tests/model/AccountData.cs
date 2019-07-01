@@ -18,6 +18,11 @@ namespace mantis_tests
             this.password = password;
         }
 
+        public AccountData(string username)
+        {
+            this.username = username;
+        }
+
         public AccountData()
         {
 

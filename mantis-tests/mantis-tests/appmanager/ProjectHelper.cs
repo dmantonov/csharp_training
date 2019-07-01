@@ -21,7 +21,16 @@ namespace mantis_tests
             InitProjectCreation();
             FillProjectRegistrtionForm(project);
             SubmitAddingProject();
-            //Continue();
+            Continue();
+        }
+
+        public void ProjectRemoving(int index)
+        {
+            manager.Navigator.OpenManagePage();
+            manager.Navigator.OpenManageProjectsPage();
+            SelectProject(index);
+            DeleteProject();
+            SubmitProjectDeletion();
         }
 
         private void Continue()
@@ -43,6 +52,59 @@ namespace mantis_tests
         private void InitProjectCreation()
         {
             driver.FindElement(By.CssSelector("input[type='submit'][value='Create New Project']")).Click();
+        }
+
+        public List<ProjectData> GetProjectList()
+        {
+            manager.Navigator.OpenManagePage();
+            manager.Navigator.OpenManageProjectsPage();
+
+            List<ProjectData> projects = new List<ProjectData>();
+
+            ICollection<IWebElement> elements = driver.FindElement(By.XPath("/html/body/table[3]/tbody"))
+                .FindElements(By.XPath(".//tr[@class='row-1' or @class='row-2']"));
+
+            foreach (IWebElement element in elements)
+                {
+                    IWebElement name = element.FindElement(By.XPath(".//td[1]")); //забираем название проекта
+                    IWebElement decription = element.FindElement(By.XPath(".//td[5]")); //забираем дескрипшен
+
+                    projects.Add(new ProjectData(name.Text, decription.Text));
+                }
+                return new List<ProjectData>(projects);
+        }
+        public void SelectProject(int index)
+        {
+            driver.FindElement(By.XPath("/html/body/table[3]/tbody/tr[" + (index+3) + "]/td[1]/a")).Click();
+        }
+
+        private void DeleteProject()
+        {
+            driver.FindElement(By.CssSelector("input[type='submit'][value='Delete Project']")).Click();
+        }
+
+        private void SubmitProjectDeletion()
+        {
+            driver.FindElement(By.CssSelector("input[type='submit'][value='Delete Project']")).Click();
+        }
+
+        public bool IsProjectCreated(int index)
+        {
+            return IsElementPresent(By.XPath("/html/body/table[3]/tbody/tr[" + (index + 3) + "]"));
+        }
+
+        public void CreateIfProjectNotCreated(int index)
+        {
+            manager.Navigator.OpenManagePage();
+            manager.Navigator.OpenManageProjectsPage();
+            if (!IsProjectCreated(index))
+            {
+                for (int i = 0; i < index + 1; i++)
+                {
+                    ProjectData defaultProjectData = new ProjectData("Default Name", "Default Description");
+                    ProjectCreation(defaultProjectData);
+                }
+            }
         }
     }
 }

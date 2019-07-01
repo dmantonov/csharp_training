@@ -6,18 +6,29 @@ using NUnit.Framework;
 namespace mantis_tests
 {
     [TestFixture]
-    public class ProjectCreatonTests : AuthTestBase
+    public class ProjectCreationTests : AuthTestBase
     {
         [Test]
         public void ProjectCreation()
         {
+            List<ProjectData> oldprojects = new List<ProjectData>();
+            oldprojects = app.Project.GetProjectList();
+
             ProjectData project = new ProjectData
             {
-                Name = "Test Project2",
-                Description = "Test Description2"
+                Name = "New test name s",
+                Description = "New test desc s"
             };
 
             app.Project.ProjectCreation(project);
+
+            List<ProjectData> newprojects = app.Project.GetProjectList();
+
+            oldprojects.Add(project);
+
+            oldprojects.Sort();
+            newprojects.Sort();
+            Assert.AreEqual(oldprojects, newprojects);
         }
     }
 }
