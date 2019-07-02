@@ -19,7 +19,10 @@ namespace mantis_tests
         public JamesHeper James { get; set; }
         public MailHelper Mail { get; set; }
 
-        protected LoginHelper loginHelper;
+        public LoginHelper loginHelper;
+
+        public AdminHelper Admin { get; set; }
+
         protected MantisNavigatorHelper navigator;
         protected ProjectHelper projectHelper;
         protected RegistrationHelper registrationHelper;
@@ -29,7 +32,7 @@ namespace mantis_tests
         private ApplicationManager()
         {
             driver = new ChromeDriver();
-            baseURL = "http://localhost";
+            baseURL = "http://localhost/mantisbt-1.2.17";
 
             registrationHelper = new RegistrationHelper(this);
             Ftp = new FtpHelper(this);
@@ -38,7 +41,7 @@ namespace mantis_tests
             projectHelper = new ProjectHelper(this);
             navigator = new MantisNavigatorHelper(this, baseURL);
             loginHelper = new LoginHelper(this);
-
+            Admin = new AdminHelper(this, baseURL);
         }
 
         ~ApplicationManager()

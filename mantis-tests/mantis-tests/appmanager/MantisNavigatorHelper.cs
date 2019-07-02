@@ -29,7 +29,7 @@ namespace mantis_tests
 
         public void OpenLoginPage()
         {
-            driver.Navigate().GoToUrl(baseURL + "/mantisbt-1.2.17/login_page.php");
+            driver.Navigate().GoToUrl(baseURL + "/login_page.php");
         }
     }
 }
