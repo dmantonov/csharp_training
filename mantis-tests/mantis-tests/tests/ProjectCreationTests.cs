@@ -11,8 +11,19 @@ namespace mantis_tests
         [Test]
         public void ProjectCreation()
         {
-            List<ProjectData> oldprojects = new List<ProjectData>();
-            oldprojects = app.Project.GetProjectList();
+            AccountData account = new AccountData
+            {
+                Username = "administrator",
+                Password = "root"
+            };
+
+            //формируем список через интерфейс
+            //List<ProjectData> oldprojects = new List<ProjectData>();
+            //oldprojects = app.Project.GetProjectList();
+
+            //формируем список через апи
+            List<ProjectData> oldprojects = new List<ProjectData>(); //Получение списка через API
+            oldprojects = app.API.GetProjectListWithAPI(account);
 
             ProjectData project = new ProjectData
             {
@@ -22,13 +33,18 @@ namespace mantis_tests
 
             app.Project.ProjectCreation(project);
 
-            List<ProjectData> newprojects = app.Project.GetProjectList();
+            //формируем новый список через интерфейс
+            //List<ProjectData> newprojects = app.Project.GetProjectList();
+
+            //формируем новый список через апи
+            List<ProjectData> newprojects = app.API.GetProjectListWithAPI(account);
+            oldprojects.Sort();
 
             oldprojects.Add(project);
 
             oldprojects.Sort();
             newprojects.Sort();
-            Assert.AreEqual(oldprojects, newprojects);
+            Assert.AreEqual(newprojects, oldprojects);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace mantis_tests
         public LoginHelper loginHelper;
 
         public AdminHelper Admin { get; set; }
+        public APIHelper API { get; private set; }
 
         protected MantisNavigatorHelper navigator;
         protected ProjectHelper projectHelper;
@@ -42,6 +43,7 @@ namespace mantis_tests
             navigator = new MantisNavigatorHelper(this, baseURL);
             loginHelper = new LoginHelper(this);
             Admin = new AdminHelper(this, baseURL);
+            API = new APIHelper(this);
         }
 
         ~ApplicationManager()

@@ -18,6 +18,8 @@ namespace mantis_tests
 
         public string Description { get; set; }
 
+        public string Id { get; set; }
+
         public ProjectData()
         {
         }
